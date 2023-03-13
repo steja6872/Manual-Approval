@@ -1,18 +1,27 @@
-name: Only manual approval
-on: [push]
-
+name: manual approval
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Run a one-line script
         run: echo Hello, world!
-             
-      - name: Manual Workflow Approval
-        uses: trstringer/manual-approval@v1
+  
+      - uses: trstringer/manual-approval@v1
         with:
-          approvers: steja6872
           secret: ${{ secrets.TOKEN }}
-          minimum-approvals: 1 
+          approvers: steja6872
+          minimum-approvals: 1
+          issue-title: "Deploying v1.3.5 to prod from staging"
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
       
 
